@@ -53,15 +53,15 @@ module Dossier
     end
 
     def segment_options_for(segment)
-      position = segment.key_path.split('.').count
+      position = segment.key_path.split('.',-1).count
       data.keys.map { |key| 
-        key.split('.') 
+        key.split('.',-1) 
       }.inject({}) { |acc, key| 
         acc.tap { |hash| 
           hash[key.first(position + 1)] ||= data[key.join('.')].first
         }
       }.select { |key, value| 
-        key.first(position) == segment.key_path.split('.')
+        key.first(position) == segment.key_path.split('.',-1)
       }.values.map { |row|
         Hash[report_results.headers.zip(row)]
       }
